@@ -62,7 +62,12 @@ io.on('connection', (socket) => {
 
     await message.save();
 
-    const messages = await Messages.find().limit(30).populate('user');
+    const messages = await Messages.find()
+      .sort({ createdAt: -1 })
+      .limit(30)
+      .populate('user');
+
+    messages.reverse();
 
     socket.emit('messages', messages);
     socket.broadcast.emit('messages', messages);
@@ -73,7 +78,12 @@ io.on('connection', (socket) => {
 
     message?.remove();
 
-    const messages = await Messages.find().limit(30).populate('user');
+    const messages = await Messages.find()
+      .sort({ createdAt: -1 })
+      .limit(30)
+      .populate('user');
+
+    messages.reverse();
 
     socket.emit('messages', messages);
     socket.broadcast.emit('messages', messages);
